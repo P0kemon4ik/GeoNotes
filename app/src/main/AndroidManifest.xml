@@ -16,8 +16,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NotesAdd"/>
-        <activity android:name=".ColorPicker"/>
+        <activity android:name=".NotesAddActivity"/>
+        <activity android:name=".ColorPickerActivity"/>
     </application>
 
 </manifest>

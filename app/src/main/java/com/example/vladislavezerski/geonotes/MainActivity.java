@@ -9,19 +9,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE = 2;
+    List<Note> notes = new ArrayList<>();
+    private NoteAdapter adapter;
+
     private List<Note> initializeData(){
-        List<Note> notes = new ArrayList<>();
-        notes.add(new Note("Notes 1. It's good notes", R.drawable.note3));
-        notes.add(new Note("Notes 2. It's no good notes", R.drawable.note3));
-        notes.add(new Note("Notes 2. It's no good notes", R.drawable.note3));
-        notes.add(new Note("Notes 2. It's no good notes", R.drawable.note3));
-        notes.add(new Note("Notes 2. It's no good notes", R.drawable.note3));
         return notes;
     }
 
@@ -32,15 +31,29 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
         rv.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-        rv.setAdapter(new NoteAdapter(initializeData()));
 
-        findViewById(R.id.imgAddNote).setOnClickListener(new View.OnClickListener() {
+        adapter = new NoteAdapter(initializeData());
+        rv.setAdapter(adapter);
+
+        ImageView addNote = (ImageView) findViewById(R.id.imgAddNote);
+
+        addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), NotesAdd.class);
-                startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), NotesAddActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE) {
+                notes.add(new Note(data.getStringExtra("text")));
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 }

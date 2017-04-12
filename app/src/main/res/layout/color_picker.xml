@@ -6,14 +6,36 @@
                 android:layout_height="match_parent"
         >
 
-    <com.skydoves.colorpickerview.ColorPickerView
-            android:id="@+id/colorPickerView"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            app:src="@drawable/palette"
-            app:selector="@drawable/wheel"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            />
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            >
+
+        <com.skydoves.colorpickerview.ColorPickerView
+                android:id="@+id/colorPickerView"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:src="@drawable/palette"
+                app:selector="@drawable/wheel"
+                android:layout_centerInParent="true"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/btnColorPick"
+                android:background="@drawable/shape_rect"
+                android:layout_below="@+id/colorPickerView"
+                android:layout_marginTop="49dp"
+                android:layout_alignRight="@+id/colorPickerView"
+                android:layout_alignEnd="@+id/colorPickerView"
+                android:layout_alignLeft="@+id/colorPickerView"
+                android:layout_alignStart="@+id/colorPickerView"
+                android:layout_gravity="center_horizontal"
+                android:textIsSelectable="false"
+                />
+    </LinearLayout>
 
 </RelativeLayout>

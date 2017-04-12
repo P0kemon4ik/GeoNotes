@@ -5,44 +5,63 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/background"
         >
-
-    <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imageView2"
-            android:background="#bacc16"
-            android:layout_alignTop="@+id/imageView"
-            android:layout_alignBottom="@+id/imageView"
-            android:layout_alignRight="@+id/imageView"
-            android:layout_alignEnd="@+id/imageView"
-            android:layout_alignLeft="@+id/imageView"
-            android:layout_alignStart="@+id/imageView"
+    <include layout="@layout/toolbar"
+             android:id="@+id/toolbar"
             />
 
-    <ImageView
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/note3"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Готово"
+            android:id="@+id/txt_gotovo"
+            android:layout_alignBottom="@+id/toolbar"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="15dp"
             />
 
-    <View
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Отмена"
+            android:id="@+id/txt_otmena"
+            android:layout_alignBottom="@+id/txt_gotovo"
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
+
+    <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/shape_oval"
-            android:layout_above="@+id/imageView2"
-            android:layout_toRightOf="@+id/imageView2"
-            android:layout_toEndOf="@+id/imageView2"
             android:id="@+id/imgChangeColor"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_below="@+id/toolbar"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="15dp"
+            />
+
+    <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:id="@+id/imageView2"
+            android:background="@drawable/shape_rect"
+            android:src="@drawable/note3"
+            android:layout_below="@+id/imgChangeColor"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
             />
 
     <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/editText"
+            android:id="@+id/txt_notes_body"
             android:background="#00000000"
             android:layout_alignTop="@+id/imageView2"
             android:layout_alignLeft="@+id/imageView2"

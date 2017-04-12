@@ -1,11 +1,13 @@
 package com.example.vladislavezerski.geonotes;
 
 public class Note {
-    String body;
-    int imgId;
+    private String body;
 
-    public Note(String body, int imgId) {
+    public Note(String body) {
         this.body = body;
-        this.imgId = imgId;
+    }
+
+    public String getBody() {
+        return body;
     }
 }
