@@ -74,5 +74,13 @@
             android:layout_alignBottom="@+id/imageView2"
             android:layout_marginBottom="10dp"
             />
+    <Button
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/btn_map"
+            android:background="@drawable/earth" android:layout_below="@+id/imageView2"
+            android:layout_alignRight="@+id/imgChangeColor"
+            android:layout_alignEnd="@+id/imgChangeColor"
+            android:layout_marginTop="30dp"/>
 
 </RelativeLayout>

@@ -6,11 +6,12 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.skydoves.colorpickerview.ColorPickerView;
 
 public class NotesAddActivity extends AppCompatActivity {
 
@@ -19,6 +20,7 @@ public class NotesAddActivity extends AppCompatActivity {
     private ImageView changeColor;
     private EditText txtBody;
     private TextView otmena;
+    private Button btnMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class NotesAddActivity extends AppCompatActivity {
         changeColor = (ImageView) findViewById(R.id.imgChangeColor);
         txtBody = (EditText) findViewById(R.id.txt_notes_body);
         otmena = (TextView) findViewById(R.id.txt_otmena);
+        btnMap = (Button) findViewById(R.id.btn_map);
 
         changeColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +54,16 @@ public class NotesAddActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                startActivity(intent);         }
+        });
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -61,6 +73,10 @@ public class NotesAddActivity extends AppCompatActivity {
             changeColor.getBackground().setColorFilter(data.getIntExtra("color", Color.BLACK), PorterDuff.Mode.SRC_ATOP);
         }
 
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return false;
     }
 
 }

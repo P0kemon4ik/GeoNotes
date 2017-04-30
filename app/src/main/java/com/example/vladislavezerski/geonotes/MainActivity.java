@@ -1,24 +1,29 @@
 package com.example.vladislavezerski.geonotes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private static final int REQUEST_CODE = 2;
     List<Note> notes = new ArrayList<>();
     private NoteAdapter adapter;
+
+    String title = "Вы действительно хотите выйти?";
+    String button1String = "Да";
+    String button2String = "Нет";
 
     private List<Note> initializeData(){
         return notes;
@@ -55,5 +60,28 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        MyDialog();
+    }
+
+    public void MyDialog(){
+        AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+        ad.setTitle(title);
+        ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Продолжайте работу", Toast.LENGTH_SHORT).show();
+            }
+        });
+        ad.show();
     }
 }

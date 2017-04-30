@@ -10,4 +10,5 @@ public class Note {
     public String getBody() {
         return body;
     }
+
 }
