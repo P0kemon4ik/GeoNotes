@@ -7,15 +7,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,10 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-    private String mUsername;
-    private String mPhotoUrl;
-
-    private List<Note> initializeData(){
+    private List<Note> initializeData() {
         return notes;
     }
 
@@ -43,13 +40,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("people");
+
+        RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
 
         adapter = new NoteAdapter(initializeData());
         rv.setAdapter(adapter);
 
-        ImageView addNote = (ImageView) findViewById(R.id.imgAddNote);
+        final ImageView addNote = (ImageView) findViewById(R.id.imgAddNote);
 
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,17 +62,28 @@ public class MainActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        if (mFirebaseUser == null) {
-            // Not signed in, launch the Sign In activity
-            startActivity(new Intent(this, SignUpActivity.class));
-            finish();
-            return;
-        } else {
-            mUsername = mFirebaseUser.getDisplayName();
-            if (mFirebaseUser.getPhotoUrl() != null) {
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Object data = ((HashMap) dataSnapshot.getValue()).get("li0m5d2RgIcMmnaW8mBjrjUTfAD3");
+                Set<String> keys = ((HashMap) data).keySet();
+
+                for (String key : keys) {
+                    HashMap o = (HashMap) ((HashMap) data).get(key);
+                    notes.add(new Note(key, (String) o.get("body"), (String) o.get("backColor"), (Double) o.get("lat"), (Double) o.get("lng"), (String) o.get("imageData")));
+                    adapter.notifyDataSetChanged();
+                }
             }
-        }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("addValueEventListener", "Failed to read value.", error.toException());
+            }
+        });
     }
 
     @Override
@@ -91,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         MyDialog();
     }
 
-    public void MyDialog(){
+    public void MyDialog() {
         AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
         ad.setTitle(title);
         ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {

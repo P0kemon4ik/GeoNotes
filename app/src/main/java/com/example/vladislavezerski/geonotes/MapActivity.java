@@ -100,7 +100,6 @@ public class MapActivity extends AppCompatActivity {
         if (mapView != null) {
             mapView.onDestroy();
         }
-//        googleMap.setMyLocationEnabled(false);
     }
 
     @Override
