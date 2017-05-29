@@ -69,6 +69,7 @@ public class LogInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -86,6 +87,7 @@ public class LogInActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
     }
 }
