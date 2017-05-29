@@ -2,7 +2,6 @@ package com.example.vladislavezerski.geonotes;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ public class MapActivity extends AppCompatActivity {
     private MapView mapView;
     private GoogleMap googleMap;
     private Button btnGoogleMap;
+    private LatLng latLng;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +52,8 @@ public class MapActivity extends AppCompatActivity {
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(LatLng latLng) {
+                        MapActivity.this.latLng = latLng;
+                        googleMap.clear();
                         googleMap.addMarker(new MarkerOptions().position(latLng).title("MyPosition"));
                     }
                 });
@@ -62,7 +64,9 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("map",mapView.getContext().toString());
+                if (latLng != null) {
+                    intent.putExtra("map", latLng);
+                }
                 setResult(RESULT_OK, intent);
                 finish();
             }

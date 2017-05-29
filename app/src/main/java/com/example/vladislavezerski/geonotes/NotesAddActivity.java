@@ -11,11 +11,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +25,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.ByteArrayOutputStream;
 
 import static android.location.LocationManager.NETWORK_PROVIDER;
 
@@ -48,6 +49,7 @@ public class NotesAddActivity extends AppCompatActivity {
     private ImageView ivPhoto;
     private GoogleMap googleMap;
     private Bundle savedInstanceState;
+    private Note note = new Note();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,8 +79,9 @@ public class NotesAddActivity extends AppCompatActivity {
         findViewById(R.id.txt_gotovo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                note.setBody(txtBody.getText().toString());
                 Intent intent = new Intent();
-                intent.putExtra("text", txtBody.getText().toString());
+                intent.putExtra("text", note);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -94,7 +97,7 @@ public class NotesAddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_MAP);
             }
         });
 
@@ -140,14 +143,16 @@ public class NotesAddActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
-            newNote.getBackground().setColorFilter(data.getIntExtra("color", Color.BLACK), PorterDuff.Mode.SRC_ATOP);
-            changeColor.getBackground().setColorFilter(data.getIntExtra("color", Color.BLACK), PorterDuff.Mode.SRC_ATOP);
+            int color = data.getIntExtra("color", Color.BLACK);
+            newNote.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            changeColor.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            note.setColor(color);
         }
 
         if (requestCode == REQUEST_CODE_MAP) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-
+                    note.setLatLng((LatLng) data.getParcelableExtra("map"));
                 }
             }
         }
@@ -163,9 +168,16 @@ public class NotesAddActivity extends AppCompatActivity {
                         Object obj = data.getExtras().get("data");
                         if (obj instanceof Bitmap) {
                             Bitmap bitmap = (Bitmap) obj;
-                            Log.d(TAG, "bitmap " + bitmap.getWidth() + " x "
-                                    + bitmap.getHeight());
+
                             ivPhoto.setImageBitmap(bitmap);
+
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                            byte[] byteArray = byteArrayOutputStream .toByteArray();
+                            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+                            note.setImgData(encoded);
+
                         }
                     }
                 }
