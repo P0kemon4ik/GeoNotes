@@ -15,10 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
     private List<Note> initializeData() {
         return notes;
     }
@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("people");
+        database = FirebaseDatabase.getInstance();
+            myRef = database.getReference("people");
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
@@ -94,8 +94,17 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE) {
-                notes.add((Note) data.getSerializableExtra("text"));
+                Note note = (Note) data.getSerializableExtra("text");
+                notes.add(note);
                 adapter.notifyDataSetChanged();
+
+//                String key = myRef.child("people").push().getKey();
+                Map<String, Object> postValues = note.toMap();
+//
+//                Map<String, Object> childUpdates = new HashMap<>();
+//                childUpdates.put("/li0m5d2RgIcMmnaW8mBjrjUTfAD3" + "/" + key, postValues);
+
+                myRef.child("people").child("li0m5d2RgIcMmnaW8mBjrjUTfAD3").child(myRef.child("people").child("li0m5d2RgIcMmnaW8mBjrjUTfAD3").push().getKey()).setValue(postValues);
             }
         }
     }

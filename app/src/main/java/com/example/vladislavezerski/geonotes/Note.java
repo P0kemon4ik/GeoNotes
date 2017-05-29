@@ -4,6 +4,8 @@ import android.graphics.Color;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Note implements Serializable {
 
@@ -53,5 +55,16 @@ public class Note implements Serializable {
         this.lat = lat;
         this.lng = lng;
         this.imgData = imgData;
+    }
+
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("body", body);
+        map.put("backColor", String.format("#%06X", (0xFFFFFF & color)));
+        map.put("lat", lat);
+        map.put("lng", lng);
+//        map.put("imageData", imgData);
+        return null;
     }
 }
